@@ -1,0 +1,1 @@
+c:\Users\treinamentosti01\Downloads\Potenciometro.ino
