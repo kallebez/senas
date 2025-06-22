@@ -1,0 +1,64 @@
+#include <LiquidCrystal.h>
+#include <DHT.h>
+
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
+
+#define DHTPIN 2
+#define DHTTYPE DHT22
+DHT sensor(DHTPIN, DHTTYPE);
+
+float hum;
+float temp;
+unsigned int valorA0 = 0;
+
+void setup() {
+  Serial.begin(9600);
+  sensor.begin();
+
+  lcd.begin(16, 2);
+  lcd.clear();
+
+  lcd.setCursor(0, 0);
+  lcd.print("Pressione Upzinho");
+  lcd.setCursor(0, 1);
+  lcd.print("Vai");
+}
+
+void loop() {
+  valorA0 = analogRead(A0);
+
+  if (valorA0 == 0) {
+    hum = sensor.readHumidity();
+    temp = sensor.readTemperature();
+
+    if (!isnan(hum) && !isnan(temp)) {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Temp: ");
+      lcd.print(temp);
+      lcd.print((char)223);
+      lcd.print("C");
+
+      lcd.setCursor(0, 1);
+      lcd.print("Umid: ");
+      lcd.print(hum);
+      lcd.print("%");
+
+      Serial.print("Temp: ");
+      Serial.print(temp);
+      Serial.print("C / Umid: ");
+      Serial.print(hum);
+      Serial.println("%");
+    }
+
+    delay(2000);
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Pressione Upzinho");
+    lcd.setCursor(0, 1);
+    lcd.print("Vai");
+  }
+
+  delay(100);
+}
